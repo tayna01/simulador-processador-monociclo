@@ -287,27 +287,6 @@ Enable debug mode? (y/n): y
 3. *Acompanhe o PC* para detectar loops
 4. *Valide endereços de memória* antes de usar
 5. *Teste instruções individualmente* antes de programas complexos
-
----
-
-## 📚 Referências e Bibliografia
-
-1. *Patterson & Hennessy* - "Computer Organization and Design: The Hardware/Software Interface"
-2. *Stallings, William* - "Computer Organization and Architecture"
-3. *Tanenbaum & Austin* - "Structured Computer Organization"
-4. *Harris & Harris* - "Digital Design and Computer Architecture"
-
----
-
-## 👥 Créditos
-
-Este simulador foi desenvolvido como material educacional para demonstrar os conceitos fundamentais de:
-- Arquitetura de computadores
-- Pipeline de processadores
-- Conjunto de instruções (ISA)
-- Organização da memória
-- Sistemas de registradores
-
 ---
 
 *Versão*: 1.01
