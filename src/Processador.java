@@ -6,10 +6,9 @@ public class Processador {
     private int pc = 0;
     private int cycleCount = 0;
 
-    // Constantes para controle
+    // max de ciclo
     private static final int MAX_CYCLES = 100000;
 
-    // Estrutura para resultados da execução
     private static class ExecutionResult {
         boolean writeRegister = false;
         int registerIndex = 0;

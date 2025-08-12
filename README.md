@@ -36,21 +36,6 @@ Este documento descreve um *Simulador de Processador Monociclo* desenvolvido em 
 - *Tamanho da memória*: 64KB (65.536 endereços)
 - *Formato das instruções*: R-Type e I-Type
 
-### Organização da Memória:
-
-┌─────────────────────────────────┐
-│        MEMÓRIA (64KB)           │
-├─────────────────────────────────┤
-│  0x0000 - 0x03FF                │
-│  Área de Instruções             │
-│  (Carregada do arquivo binário) │
-├─────────────────────────────────┤
-│  0x0400 - 0xFFFF                │
-│  Área de Dados                  │
-│  (Inicializada com zeros)       │
-└─────────────────────────────────┘
-
-
 ### Banco de Registradores:
 
 R0: Registrador para syscalls
@@ -65,7 +50,7 @@ R7: Registrador de propósito geral
 
 ---
 
-## 🔄 Pipeline Monociclo
+## 🔄 Monociclo
 
 O processador implementa um pipeline monociclo com *5 etapas* executadas sequencialmente:
 
@@ -144,22 +129,6 @@ O processador implementa um pipeline monociclo com *5 etapas* executadas sequenc
 | Print Integer | 3 | Imprime inteiro | R1 = valor |
 | Sleep | 6 | Pausa execução | R1 = segundos |
 | Get Time | 7 | Obtém timestamp | Retorna em R1 |
-
----
-
-## 📁 Estrutura do Projeto
-
-
-simulador-processador/
-├── Main.java                 # Ponto de entrada
-├── Processador.java          # Lógica principal do pipeline
-├── Memoria.java              # Gerenciamento da memória
-├── Registrador.java          # Banco de registradores
-├── Instrucao.java            # Decodificação de instruções
-├── Lib.java                  # Utilitários (carregamento de binários)
-├── ProcessorException.java   # Exceções customizadas
-└── README.md                 # Este documento
-
 
 ---
 
@@ -284,55 +253,7 @@ Enable debug mode? (y/n): y
 
 ---
 
-## 💡 Exemplos Práticos
-
-### Exemplo 1: Programa Simples
-*Assembly:*
-assembly
-mov r1, 10      ; R1 = 10
-mov r2, 5       ; R2 = 5
-add r3, r1, r2  ; R3 = R1 + R2 = 15
-mov r0, 0       ; Preparar syscall
-syscall         ; Terminar programa
-
-
-*Saída do Debug:*
-
-CICLO 1 - PIPELINE MONOCICLO
-1. FETCH: PC = 0
-   Buscando instrução na memória... Instrução bruta: 0x8C0A (35850)
-2. DECODE: Decodificando instrução... OK
-   I-Type[raw=0x8C0A, op=3, rd=R1, imm=10]
-   Formato I: opcode=3, rd=R1, imediato=10
-3. EXECUTE: Executando operação... OK
-   MOV: R1 = 10 (imediato)
-4. MEMORY: Nenhum acesso à memória... OK
-5. WRITE BACK: Escrevendo R1 = 10... OK
-6. PC UPDATE: Incremento normal (PC: 0 -> 1)
-
-   Estado dos Registradores:
-   R0:      0 (0x0000)  R1:     10 (0x000A)  R2:      0 (0x0000)  R3:      0 (0x0000)
-   R4:      0 (0x0000)  R5:      0 (0x0000)  R6:      0 (0x0000)  R7:      0 (0x0000)
-
-
-### Exemplo 2: Loop com Condicional
-*Assembly:*
-assembly
-mov r1, 0       ; contador = 0
-mov r2, 5       ; limite = 5
-loop:
-add r1, r1, 1   ; contador++
-cmp_equal r3, r1, r2  ; r3 = (contador == limite)
-jump_cond r3, end     ; se igual, sair do loop
-jump loop       ; voltar ao loop
-end:
-mov r0, 0       ; preparar syscall
-syscall         ; terminar
-
-
----
-
-## 🔧 Troubleshooting
+## 🔧 Solução de problemas
 
 ### Problemas Comuns:
 
@@ -369,26 +290,6 @@ syscall         ; terminar
 
 ---
 
-## 📊 Limitações e Extensões Futuras
-
-### Limitações Atuais:
-- Apenas 8 registradores
-- Sem suporte a ponto flutuante
-- Memória limitada a 64KB
-- Sem cache ou pipeline superescalar
-- Sem interrupções ou exceções de hardware
-
-### Possíveis Extensões:
-- Implementar cache L1
-- Adicionar mais registradores
-- Suporte a operações de ponto flutuante
-- Sistema de interrupções
-- Predição de branches
-- Pipeline superescalar
-- Unidade de gerenciamento de memória (MMU)
-
----
-
 ## 📚 Referências e Bibliografia
 
 1. *Patterson & Hennessy* - "Computer Organization and Design: The Hardware/Software Interface"
@@ -409,11 +310,4 @@ Este simulador foi desenvolvido como material educacional para demonstrar os con
 
 ---
 
-*Versão*: 1.0  
-*Data*: 2024  
-*Linguagem*: Java 8+  
-*Licença*: Educacional
-
----
-
-Este documento pode ser salvo como README.md ou impresso para estudo offline.
+*Versão*: 1.01
