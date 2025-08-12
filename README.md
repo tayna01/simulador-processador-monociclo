@@ -24,15 +24,14 @@ Este documento descreve um *Simulador de Processador Monociclo* desenvolvido em 
 
 ### Banco de Registradores:
 
-R0: Registrador para syscalls
-R1: Registrador de propósito geral / parâmetro syscall
-R2: Registrador de propósito geral
-R3: Registrador de propósito geral
-R4: Registrador de propósito geral
-R5: Registrador de propósito geral
-R6: Registrador de propósito geral
-R7: Registrador de propósito geral
-
+> R0: Registrador para syscalls  
+> R1: Registrador de propósito geral / parâmetro syscall  
+> R2: Registrador de propósito geral  
+> R3: Registrador de propósito geral  
+> R4: Registrador de propósito geral  
+> R5: Registrador de propósito geral  
+> R6: Registrador de propósito geral  
+> R7: Registrador de propósito geral
 
 ---
 
