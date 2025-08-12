@@ -1,19 +1,5 @@
 # 📚 Simulador de Processador Monociclo - Documentação Completa
 
-## 📑 Índice
-1. [Introdução](#introdução)
-2. [Arquitetura do Processador](#arquitetura-do-processador)
-3. [Pipeline Monociclo](#pipeline-monociclo)
-4. [Conjunto de Instruções (ISA)](#conjunto-de-instruções-isa)
-5. [Estrutura do Projeto](#estrutura-do-projeto)
-6. [Classes e Responsabilidades](#classes-e-responsabilidades)
-7. [Fluxo de Execução](#fluxo-de-execução)
-8. [Como Usar](#como-usar)
-9. [Exemplos Práticos](#exemplos-práticos)
-10. [Troubleshooting](#troubleshooting)
-
----
-
 ## 🎯 Introdução
 
 Este documento descreve um *Simulador de Processador Monociclo* desenvolvido em Java que implementa uma arquitetura hipotética de 16 bits. O simulador executa programas em formato binário e demonstra claramente todas as etapas do pipeline monociclo.
