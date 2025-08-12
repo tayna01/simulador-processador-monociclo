@@ -57,8 +57,4 @@ public class Memoria {
         }
         memory[realAddress] = value;
     }
-
-    public int getInstructionCount() {
-        return instructionCount;
-    }
 }
