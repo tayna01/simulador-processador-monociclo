@@ -13,9 +13,12 @@ public class Memoria {
 
     private void loadBinary(String binaryPath) throws ProcessorException {
         try {
+            if (binaryPath == null || !binaryPath.toLowerCase().endsWith(".bin")) {
+                throw new ProcessorException("O arquivo informado não possui extensão .bin: " + binaryPath);
+            }
+
             Lib loader = new Lib();
             short[] loadedInstructions = loader.load_binary(binaryPath);
-
             // Copiar instruções para a área de instruções
             System.arraycopy(loadedInstructions, 0, memory, INSTRUCTION_START, loadedInstructions.length);
             instructionCount = loadedInstructions.length;
