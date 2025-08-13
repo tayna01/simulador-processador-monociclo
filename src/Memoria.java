@@ -19,11 +19,9 @@ public class Memoria {
 
             Lib loader = new Lib();
             short[] loadedInstructions = loader.load_binary(binaryPath);
-            // Copiar instruções para a área de instruções
             System.arraycopy(loadedInstructions, 0, memory, INSTRUCTION_START, loadedInstructions.length);
             instructionCount = loadedInstructions.length;
 
-            // Inicializar área de dados com zeros
             for (int i = DATA_START; i < MEMORY_SIZE; i++) {
                 memory[i] = 0;
             }

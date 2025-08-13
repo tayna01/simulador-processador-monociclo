@@ -6,7 +6,6 @@ public class Processador {
     private int pc = 0;
     private int cycleCount = 0;
 
-    // max de ciclo
     private static final int MAX_CYCLES = 100000;
 
     private static class ExecutionResult {
@@ -67,33 +66,22 @@ public class Processador {
     }
 
     private void executeCycle() throws ProcessorException {
-        // === ETAPA 1: FETCH ===
         if (debugMode) {
             System.out.printf("Ciclo %d - PC: %d\n", cycleCount, pc);
         }
 
         short rawInstruction = fetch();
 
-        // === ETAPA 2: DECODE ===
         Instrucao instruction = decode(rawInstruction);
 
         if (debugMode) {
             System.out.println("  Decodificada: " + instruction.toString());
         }
-
-        // === ETAPA 3: EXECUTE ===
         ExecutionResult result = execute(instruction);
-
-        // === ETAPA 4: MEMORY ACCESS ===
         memoryAccess(result);
-
-        // === ETAPA 5: WRITE BACK ===
         writeBack(result);
-
-        // === CONTROLE DE FLUXO ===
         updatePC(result);
 
-        // === VERIFICAR TÉRMINO/ERRO ===
         if (result.terminate) {
             running = false;
         }
@@ -102,9 +90,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // ETAPA 1: FETCH
-    // ========================================================================
     private short fetch() throws ProcessorException {
         try {
             return memoria.readInstruction(pc);
@@ -113,16 +98,10 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // ETAPA 2: DECODE
-    // ========================================================================
     private Instrucao decode(short raw) {
         return new Instrucao(raw);
     }
 
-    // ========================================================================
-    // ETAPA 3: EXECUTE
-    // ========================================================================
     private ExecutionResult execute(Instrucao instr) throws ProcessorException {
         ExecutionResult result = new ExecutionResult();
 
@@ -147,7 +126,7 @@ public class Processador {
         short val2 = registrador.get(rs2);
 
         switch (opcode) {
-            case 0: // add
+            case 0:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) (val1 + val2);
@@ -157,7 +136,7 @@ public class Processador {
                 }
                 break;
 
-            case 1: // sub
+            case 1:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) (val1 - val2);
@@ -167,7 +146,7 @@ public class Processador {
                 }
                 break;
 
-            case 2: // mul
+            case 2:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) (val1 * val2);
@@ -177,7 +156,7 @@ public class Processador {
                 }
                 break;
 
-            case 3: // div
+            case 3:
                 if (val2 == 0) {
                     result.error = true;
                     result.errorMessage = "Divisão por zero: R" + rs2 + " = 0";
@@ -192,7 +171,7 @@ public class Processador {
                 }
                 break;
 
-            case 4: // cmp_equal
+            case 4:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) (val1 == val2 ? 1 : 0);
@@ -202,7 +181,7 @@ public class Processador {
                 }
                 break;
 
-            case 5: // cmp_neq
+            case 5:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) (val1 != val2 ? 1 : 0);
@@ -212,7 +191,7 @@ public class Processador {
                 }
                 break;
 
-            case 15: // load
+            case 15:
                 result.accessMemory = true;
                 result.isMemoryWrite = false;
                 result.memoryAddress = val1;
@@ -224,7 +203,7 @@ public class Processador {
                 }
                 break;
 
-            case 16: // store
+            case 16:
                 result.accessMemory = true;
                 result.isMemoryWrite = true;
                 result.memoryAddress = val1;
@@ -234,7 +213,7 @@ public class Processador {
                 }
                 break;
 
-            case 63: // syscall
+            case 63:
                 handleSyscall(result);
                 break;
 
@@ -251,7 +230,7 @@ public class Processador {
         int imediato = instr.getImmediateUnsigned();
 
         switch (opcode) {
-            case 0: // jump
+            case 0:
                 result.jump = true;
                 result.jumpAddress = imediato;
                 if (debugMode) {
@@ -259,7 +238,7 @@ public class Processador {
                 }
                 break;
 
-            case 1: // jump_cond (se rd == 1 pula)
+            case 1:
                 result.conditionalJump = true;
                 result.conditionRegister = rd;
                 result.conditionalJumpAddress = imediato;
@@ -268,7 +247,7 @@ public class Processador {
                 }
                 break;
 
-            case 3: // mov imediato
+            case 3:
                 result.writeRegister = true;
                 result.registerIndex = rd;
                 result.registerValue = (short) imediato;
@@ -284,16 +263,13 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // ETAPA 4: MEMORY ACCESS
-    // ========================================================================
+
     private void memoryAccess(ExecutionResult result) throws ProcessorException {
         if (result.accessMemory) {
             try {
                 if (result.isMemoryWrite) {
                     memoria.writeData(result.memoryAddress, result.memoryValue);
                 } else {
-                    // Para load, ler da memória e salvar o valor
                     result.registerValue = memoria.readData(result.memoryAddress);
                 }
             } catch (Exception e) {
@@ -304,9 +280,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // ETAPA 5: WRITE BACK
-    // ========================================================================
     private void writeBack(ExecutionResult result) throws ProcessorException {
         if (result.writeRegister) {
             try {
@@ -319,9 +292,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // CONTROLE DE FLUXO
-    // ========================================================================
     private void updatePC(ExecutionResult result) {
         if (result.jump) {
             pc = result.jumpAddress;
@@ -343,9 +313,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // SYSCALLS
-    // ========================================================================
     private void handleSyscall(ExecutionResult result) {
         short service = registrador.get(0);
 
@@ -354,12 +321,12 @@ public class Processador {
         }
 
         switch (service) {
-            case 0: // encerra o programa
+            case 0:
                 result.terminate = true;
                 System.out.println("Programa encerrado via syscall");
                 break;
 
-            case 1: // print string (endereço em r1)
+            case 1:
                 try {
                     int addr = registrador.get(1);
                     StringBuilder sb = new StringBuilder();
@@ -375,17 +342,17 @@ public class Processador {
                 }
                 break;
 
-            case 2: // print newline
+            case 2:
                 System.out.println();
                 break;
 
-            case 3: // print integer em r1
+            case 3:
                 System.out.println(registrador.get(1));
                 break;
 
-            case 6: // sleep
+            case 6:
                 try {
-                    int sleepTime = registrador.get(1); // tempo em segundos
+                    int sleepTime = registrador.get(1);
                     Thread.sleep(sleepTime * 1000L);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -394,7 +361,7 @@ public class Processador {
                 }
                 break;
 
-            case 7: // get time
+            case 7:
                 int currentTime = (int) (System.currentTimeMillis() / 1000);
                 result.writeRegister = true;
                 result.registerIndex = 1;
@@ -407,9 +374,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // VALIDAÇÕES
-    // ========================================================================
     private void validateInstruction(Instrucao instr) throws ProcessorException {
         if (instr.isFormatR()) {
             validateRegisterIndex(instr.getRd(), "rd");
@@ -426,9 +390,6 @@ public class Processador {
         }
     }
 
-    // ========================================================================
-    // UTILITÁRIOS
-    // ========================================================================
     private void printFinalState() {
         System.out.println("=== Estado Final dos Registradores ===");
         registrador.dump();

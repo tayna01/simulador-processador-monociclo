@@ -25,7 +25,6 @@ public class Lib {
             short[] instructions = new short[numInstructions];
 
             for (int i = 0; i < numInstructions; i++) {
-                // Lê 2 bytes e converte para short (little-endian)
                 int low = dataInputStream.readByte() & 0xFF;
                 int high = dataInputStream.readByte() & 0xFF;
                 instructions[i] = (short) (low | (high << 8));
