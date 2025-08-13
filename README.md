@@ -1,1 +1,1 @@
-# 📚 Simulador de Processador Monociclo
+# Simulador de Processador Monociclo
